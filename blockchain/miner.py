@@ -30,8 +30,8 @@ def proof_of_work(last_proof):
       incr = -1
     #  TODO: Your code here
     while valid_proof(last_hash, proof) is False:
-      if timer() - start > 30:
-        return 0
+      # if timer() - start > 30:
+      #   return 0
       proof += incr
 
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
