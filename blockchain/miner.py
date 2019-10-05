@@ -19,20 +19,34 @@ def proof_of_work(last_proof):
     - p is the previous proof, and p' is the new proof
     """
 
+    # start = timer()
+
+    # last_hash = hashlib.sha256(f'{last_proof}'.encode()).hexdigest()
+
+    # print(f"Searching for next proof, last one was {last_proof}")
+    # proof = last_proof
+    # incr = 1
+    # if last_proof < 0:
+    #   incr = -1
+    # #  TODO: Your code here
+    # while valid_proof(last_hash, proof) is False:
+    #   # if timer() - start > 30:
+    #   #   return 0
+    #   proof += incr
+
+    # print("Proof found: " + str(proof) + " in " + str(timer() - start))
+    # return proof
+
     start = timer()
 
     last_hash = hashlib.sha256(f'{last_proof}'.encode()).hexdigest()
 
     print(f"Searching for next proof, last one was {last_proof}")
     proof = last_proof
-    incr = 1
-    if last_proof < 0:
-      incr = -1
-    #  TODO: Your code here
+
     while valid_proof(last_hash, proof) is False:
-      # if timer() - start > 30:
-      #   return 0
-      proof += incr
+
+      proof += 1
 
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
     return proof
@@ -45,11 +59,16 @@ def valid_proof(last_hash, proof):
 
     IE:  last_hash: ...999123456, new hash 123456888...
     """
+
+    # last_hash_str = str(last_hash)
+    # proof_str = str(proof).encode()  
+    # guess_hash = hashlib.sha256(proof_str).hexdigest() 
+
     guess = f"{proof}".encode()
     guess_hash = hashlib.sha256(guess).hexdigest()
     # TODO: Your code here!
-    if last_hash[-6:] == guess_hash[:6]:
-      print(f"last and guess hashes: {last_hash}, {guess_hash}")
+    # if last_hash[-6:] == guess_hash[:6]:
+    #   print(f"last and guess hashes: {last_hash}, {guess_hash}")
     return last_hash[-6:] == guess_hash[:6]
 
 
@@ -58,7 +77,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         node = sys.argv[1]
     else:
-        node = "https://lambda-coin.herokuapp.com"
+        node = "https://lambda-coin.herokuapp.com/api"
 
     coins_mined = 0
 
@@ -86,6 +105,7 @@ if __name__ == '__main__':
 
         r = requests.post(url=node + "/mine", json=post_data)
         data = r.json()
+        # print(data)
         if data.get('message') == 'New Block Forged':
             coins_mined += 1
             print("Total coins mined: " + str(coins_mined))
